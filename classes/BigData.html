@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+ <!-- Per insertar Codi, podeu utilitzar http://hilite.me/ -->
+    <head>
+        <title>Panorama de la música catalana</title>
+        <link href="style.css" rel="stylesheet" type="text/css">
+        <!-- Si voleu canviar la font o algun altre paràmetre, ho podeu fer aquí, o al CSS -->
+        <style>
+            body {
+                background-color: white;
+            }
+            .container {
+                max-width: 1100px;
+            }
+            h1, h2, h3, h4, h5, p {
+                color:black;
+            }
+            a:link {
+                color:brown;
+            }
+            a:visited {
+                color: #555a5e;
+            }
+            center img{
+                margin: 0 auto;
+                max-width: 50%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+            <p>Autors: Juanra Hoyo, Alexandre Cirici</p>
+            </header>
+                <h1>Panorama de la música catalana</h1>
+                <p>
+                    El nostre objectiu amb aquest treball és analitzar el panorama musical català mitjançant mètriques proporcionades per l'API de Spotify. Per a això, hem seleccionat manualment les 40 primeres playlists de música en català que ens ofereix Spotify. A partir d'aquestes, hem pogut obtenir dades suficients per analitzar la situació actual de la música catalana.</p>
+                <h2>Apartat tècnic</h2>
+                <p>
+                    Per aconseguir els resultats obtinguts, primer de tot ens hem hagut de crear un compte a Spotify developers, no a spotipy. Per a la programació hem fet servir el programa PyCharm i hem programat en llenguatge Python3. Un cop al programa, hem agafat l’ID de la playlist de les 40 que havíem seleccionat i hem extret tota la informació possible; des de l'ID de cada artista o els que més es repeteixen dins les playlists i tenen més visites fins dades més concretes de cada pista com ara el tempo, la intensitat, l'energia de cada cançó.</p>
+                <h3>Com hem extret les dades?</h3>
+                <p>Primer, es realitzen les importacions de les biblioteques necessàries. S'utilitza la biblioteca spotipy, en associació amb SpotifyClientCredentials, per interactuar amb l'API de Spotify. La biblioteca json permet la gestió d'arxius JSON. La biblioteca pandas serveix per gestionar dades en estructures del tipus DataFrame. Finalment, glob s'utilitza per a la gestió de la cerca d'arxius en el sistema de fitxers.
+
+                    Després, es configuren les credencials de Spotify, definides amb els valors client_id i client_secret. Amb aquestes credencials, s'inicia el client de Spotify, que permetrà l'accés a les diferents llistes de reproducció.</p>
+                <!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">import</span> <span style="color: #f8f8f2">pandas</span> <span style="color: #f92672">as</span> <span style="color: #f8f8f2">pd</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">glob</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">json</span>
+
+<span style="color: #f8f8f2">files</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">glob</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">glob(</span><span style="color: #e6db74">&quot;data_raw_playlists/*.json&quot;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">print</span><span style="color: #f8f8f2">(len(files))</span>
+
+<span style="color: #f8f8f2">llista</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">[]</span>
+
+<span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">file</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">files:</span>
+    <span style="color: #66d9ef">with</span> <span style="color: #f8f8f2">open(file,</span> <span style="color: #f8f8f2">encoding</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;utf8&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">as</span> <span style="color: #f8f8f2">f:</span>
+        <span style="color: #f8f8f2">data</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">json</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">load(f)</span>
+
+        <span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">d</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">data[</span><span style="color: #e6db74">&#39;items&#39;</span><span style="color: #f8f8f2">]:</span>
+            <span style="color: #f8f8f2">track_details</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span>
+                <span style="color: #e6db74">&quot;Nombre_Cancion&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">d[</span><span style="color: #e6db74">&#39;track&#39;</span><span style="color: #f8f8f2">][</span><span style="color: #e6db74">&#39;name&#39;</span><span style="color: #f8f8f2">],</span>
+                <span style="color: #e6db74">&quot;Artista&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">d[</span><span style="color: #e6db74">&#39;track&#39;</span><span style="color: #f8f8f2">][</span><span style="color: #e6db74">&#39;artists&#39;</span><span style="color: #f8f8f2">][</span><span style="color: #ae81ff">0</span><span style="color: #f8f8f2">][</span><span style="color: #e6db74">&#39;name&#39;</span><span style="color: #f8f8f2">],</span>
+                <span style="color: #e6db74">&quot;id&quot;</span><span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">d[</span><span style="color: #e6db74">&#39;track&#39;</span><span style="color: #f8f8f2">][</span><span style="color: #e6db74">&#39;id&#39;</span><span style="color: #f8f8f2">],</span>
+            <span style="color: #f8f8f2">}</span>
+            <span style="color: #f8f8f2">llista</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">append(track_details)</span>
+
+<span style="color: #f8f8f2">df</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">pd</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">DataFrame(llista)</span>
+<span style="color: #66d9ef">print</span><span style="color: #f8f8f2">(df)</span>
+<span style="color: #f8f8f2">df</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">to_excel(</span><span style="color: #e6db74">&quot;dataset_final.xlsx&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">index</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">False)</span>
+</pre></div>
+
+
+
+                <p>Seguidament, es defineix una llista d'ID de playlists que es volen processar. Aquesta llista conté diversos ID de playlists proporcionades per un professor.
+
+                    El següent pas és obtenir els detalls de les playlists i guardar-los en arxius JSON. Per a cada ID de playlist en la llista, es recuperen les pistes utilitzant la funció de spotipy, playlist_tracks. Els resultats es guarden en arxius JSON dins la carpeta data_raw, utilitzant per a cada arxiu el nom de la playlist corresponent.
+                    
+                    Després, es llegeixen els arxius JSON i es crea un DataFrame. S'utilitza glob per obtenir una llista de tots els arxius JSON dins la carpeta data_raw_playlists. Es crea una llista buida per emmagatzemar els detalls de cada cançó. Per a cada arxiu, es llegeix el contingut JSON i s'extreuen els detalls de cada cançó (títol, artista, ID). Aquests detalls s'afegeixen a la llista creada anteriorment.
+                    
+                    Finalment, la llista de detalls de les cançons es transforma en un DataFrame de pandas, i aquest DataFrame es guarda en un arxiu Excel anomenat dataset_final.xlsx, sense incloure els índexs de fila.
+                    
+                    Aquest codi fa possible recollir la informació de les cançons procedents de diferents llistes de reproducció de Spotify, guardar aquesta informació en arxius JSON i, posteriorment, crear un arxiu Excel que conté tota la informació recopilada.</p>
+                <!-- HTML generated using hilite.me --><div style="background: #272822; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #f92672">import</span> <span style="color: #f8f8f2">spotipy</span>
+<span style="color: #f92672">from</span> <span style="color: #f8f8f2">spotipy.oauth2</span> <span style="color: #f92672">import</span> <span style="color: #f8f8f2">SpotifyClientCredentials</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">json</span>
+
+<span style="color: #75715e"># Credenciales de la API de Spotify</span>
+<span style="color: #f8f8f2">api_client_id</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;41a11a24c118434a8654a7552a23538b&quot;</span>
+<span style="color: #f8f8f2">api_client_secret</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;c9214ce7a837422f8335d101a23b91da&quot;</span>
+
+<span style="color: #75715e"># Inicialización del cliente de SpotifyyClientCredentials(api_client_id, api_client_secret))</span>
+<span style="color: #f8f8f2">spotify</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">spotipy</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">Spotify(client_credentials_manager</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">Spotif</span>
+
+<span style="color: #75715e"># IDs de las playlists proporcionadas por el profesor</span>
+<span style="color: #f8f8f2">playlist_ids</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">[</span>
+    <span style="color: #e6db74">&quot;37i9dQZF1EIhDc7mWXkbos&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4wZA7zbfDuTi9yqZy8WY4y&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;3OpGsHf8ZR9V4F2mTh22Uz&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;2b3pVcS5autbV9Tcy89hl3&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;02NHjoouh7OmY6gBk6hldX&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4pr7IubFf891ChnMYcx2oc&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4w67ep9rrW7Ozf2yUqh4QO&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;0U5WS4wTvddscAN2Y5g6Qw&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;6zFzRpnJZ5jePPuqMnVqg6&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4BLamCd0JOc2jYj8EbSNvC&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;6bWt2ca5H1mM67hdNHSREV&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;0GbxIysV6CFUpilzEuJjo8&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;5MrCbGjvH8Zkdlda7mP1eV&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;7wFSRt16D7WHSmRoeYzg4J&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4QNOMuWvE9gnaWQr1ep0Ba&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;5rNrHUbQSazxbvFTyaZnDx&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4HCaafZ1t7ToyDjtXd7W8k&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;37i9dQZF1DWZYOM6QxgTaX&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;37i9dQZF1EIeKaBHBiBLox&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4OV8N0FrIu50zJG8OFCpy4&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;0vSyPyLfWyLdEw524urYJX&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;59qc5gxfkHXHEp6nA6EBfG&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4JmZtWXlINzHbVzBVtAr6W&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;5NpmcN5U1tf2CUlmhQxQ5Z&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;1WvD1POt4xezq03dt88sVP&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;2csTO8xLbOsq9qmOljLNQK&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;1UHR4j2kx1QLPeB1k6970s&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;47jMFSOJueCUHnmyknQ8mF&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4VeF8weIqye7XYgJoR9vQV&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;37i9dQZF1DWSH6zp4DcSeT&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;2ZC8qJZvBzMocepC9lISva&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;1oVo6GjJ552t0isTLJG5rO&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;1SBmBqqapnlMb9gDX45JTJ&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;4Od8dJk0Xh6XQIgTTQMZ5Y&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;5EM5dQw11Wk5cBiAPZl4nr&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;7e3BurK2Q6Z3QkAeTwM064&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;6qMLWVLcvhSgDGtjVsouVX&quot;</span><span style="color: #f8f8f2">,</span>
+    <span style="color: #e6db74">&quot;3VGSK0uB07mmYcgKkhVuUI&quot;</span>
+<span style="color: #f8f8f2">]</span>
+
+<span style="color: #75715e">#DETALLS DE LE SPLAYLISTS</span>
+<span style="color: #f8f8f2">all_tracks</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">[]</span>
+<span style="color: #f8f8f2">repeated_tracks</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{}</span>
+
+<span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">playlist_id</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">playlist_ids:</span>
+    <span style="color: #f8f8f2">tracks</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">spotify</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">playlist_tracks(playlist_id)</span>
+    <span style="color: #66d9ef">with</span> <span style="color: #f8f8f2">open(f</span><span style="color: #e6db74">&#39;data_raw/{playlist_id}.json&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;w&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">encoding</span><span style="color: #f92672">=</span><span style="color: #e6db74">&#39;utf-8&#39;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">as</span> <span style="color: #f8f8f2">f:</span>
+        <span style="color: #f8f8f2">json</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">dump(tracks,</span> <span style="color: #f8f8f2">f,</span> <span style="color: #f8f8f2">ensure_ascii</span><span style="color: #f92672">=</span><span style="color: #f8f8f2">False,</span> <span style="color: #f8f8f2">indent</span><span style="color: #f92672">=</span><span style="color: #ae81ff">4</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+    <!-- Fi Fragment de codi -->
+    <h2>La investigación</h2>
+    <p>En primer lloc hem volgut analitzar quines són les cançons més repetides en totes les playlists ja que durant la tria de les playlists de Spotify (que les vam haver d’agafar manualment) ja vam veure que hi havia moltes cançons que es repetien. Per fer-ho, amb l’eina de Tableau hem posat “Track Name” en files i un recompte anomenat “Sheet” en l’apartat de les columnes. Aleshores hem posat un filtre per mostrar les cançons que es repeteixen almenys 5 vegades coma mínim a les playlists. Per últim hem endreçat de més a menys i canviat els colors. </p>
+    <p> Una cosa que hem trobat a faltar i que per això hem afegit a útlim moment és el fet de passar el cursor per les barres i que es mostrés l'artista de cada cançó. Per fer-ho hem afegit "Artistes" com a descripció emergent.</p>
+        
+    </p>
+    <!-- Ejemplo de codigo de Grafico incrustado-->
+<div class='tableauPlaceholder' id='viz1715697308938' style='position: relative'><noscript><a href='#'><img alt='Cançons més repetides a les playlists ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ca&#47;Canons_repetides_final_final&#47;Hoja1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Canons_repetides_final_final&#47;Hoja1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ca&#47;Canons_repetides_final_final&#47;Hoja1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1715697308938');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>    
+    <p>Hem posat "Track name" en files i un recompte anomenat "Sheet" a columnes. Llavors hem afegit un filtre en aquest recompte on mostri les cançons que s'hagin repetit com a mínim 5 vegades a les playlists. Per últim hem endreçat de més a menys i hem canviat alguns colors.</p>    
+    <p>Per últim hem afegit els "Artistes" com a descripció emergent. Així podem veure quins són els autors de les cançons més repetides a les playlists.</p>
+<h3>Variables de la API</h3>
+    <p>Hem posat "Artistas" en files i un recompte a columnes. A la descripció emergent hem afegit els géneres d'aquests artistes. Després endreçat en ordre descendent i com a mínim ens apareixen els artistes que han aparegut 30 vegades a les playlists. Això últim ho hem pogut fer afegint a "filtres" el recompte "Sheet" i modificant el filtre.</p>
+<h4>Problemes que ens hem trobat</h4>
+    <p>El primer problema que ens hem trobat a l'hora de fer els gràfics a Tableau és el nostre propi Dataset ja que quan voliem fer el recompte de cançons en cada gènere musical, ens comptava quants cops sortia cada cançó a cada playlists.</p>
+    <div class='tableauPlaceholder' id='viz1715698374468' style='position: relative'><noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ar&#47;Artistes_repetits&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Artistes_repetits&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ar&#47;Artistes_repetits&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1715698374468');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    <p>Com les cançons es repetien en varies playlists, les dades d'aquestes (danceability, loudness, tempo, popularity, valence...) eren incorrectes ja que se sumaven entre aquestes. Per això hem hagut de crear un camp de càlcul per eliminar les còpies de cada cançó amb la següent fòrmula: 
+        "{FIXED [Track Name]:MIN ([Danceability])}"</p>
+    <p>En aquest cas, la fòrmula està orientada per solucionar la variable "Danceability". Per veure les mesures correctes, només hem de canviar "Danceability" per la variable que volguem mostrar.</p>
+    <div class='tableauPlaceholder' id='viz1716303507989' style='position: relative'><noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Da&#47;Danceabilitu7&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Danceabilitu7&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Da&#47;Danceabilitu7&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1716303507989');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    <div class='tableauPlaceholder' id='viz1716304543640' style='position: relative'><noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Da&#47;Danceabilitufdsafdsa&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Danceabilitufdsafdsa&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Da&#47;Danceabilitufdsafdsa&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1716304543640');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    <h3>Conclusions</h3>
+    <p>Ens ha agradat força fer aquesta pràctica, tot i les dificultats que ens han anat apareixent al llarg d'aquesta ens hem compenetrat força bé per assolir tots els objectius que teniem. També afegir que aquest procés d'extracció i manipulació de dades amb l'API de Spotify ha demostrat ser molt eficient i flexible, ja que permet recopilar i organitzar dades de diverses playlists de manera ràpida i precisa. A més, l'ús d'eines com Tableau facilita la visualització i anàlisi de les dades recopilades, obrint la seva aplicació a molts projectes d'anàlisi musical. Hem resolt molt bé les tasques que se'ns han presentat, automatitzant i optimitzant el procés de recopilació de dades.</p>
+                       
+            <footer>
+			<hr>
+			<p>
+               Artistes: Juanra Hoyo i Alexandre Cirici
+            </p>
+
+			</footer>
+		</div>
+	</body>
+</html>
